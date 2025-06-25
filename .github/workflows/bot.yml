@@ -33,6 +33,10 @@ jobs:
       run: |
         echo "# Updated on $(date)" >> rectv_kanallar.m3u  # Dosyaya zaman damgası ekliyoruz
 
+    - name: Pull latest changes before commit
+      run: |
+        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
+
     - name: Commit the M3U file from Bot 1
       run: |
         git config --global user.name "github-actions[bot]"
@@ -65,6 +69,10 @@ jobs:
       run: |
         echo "# Updated on $(date)" >> rectv_movies.m3u  # Dosyaya zaman damgası ekliyoruz
 
+    - name: Pull latest changes before commit
+      run: |
+        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
+
     - name: Commit the M3U file from Bot 2
       run: |
         git config --global user.name "github-actions[bot]"
@@ -96,6 +104,10 @@ jobs:
     - name: Update M3U file from Bot 3 (Adding timestamp)
       run: |
         echo "# Updated on $(date)" >> rectv_series.m3u  # Dosyaya zaman damgası ekliyoruz
+
+    - name: Pull latest changes before commit
+      run: |
+        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
 
     - name: Commit the M3U file from Bot 3
       run: |
