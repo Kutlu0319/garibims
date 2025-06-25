@@ -1,8 +1,8 @@
-name: 6 Saatte Bir Revize
+name: 12 Saatte Bir Revize
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Her 6 saatte bir çalışacak
+    - cron: '0 */12 * * *'  # Her 12 saatte bir çalışacak
   workflow_dispatch:  # Manuel tetikleme
 
 permissions:
@@ -38,4 +38,4 @@ jobs:
         git config --global user.email "github-actions[bot]@users.noreply.github.com"  # Email adresi
         git add rectv_kanallar.m3u  # Ana dizine kaydedilen dosyayı ekliyoruz
         git commit -m "Add new m3u file"
-        git push origin main  # Değişiklikleri GitHub'a gönderiyoruz
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main  # GitHub Token ile push işlemi
