@@ -29,12 +29,16 @@ jobs:
       run: |
         python channels.py  # channels.py dosyasını çalıştırıyoruz
 
+    - name: Update M3U file from Bot 1 (Adding timestamp)
+      run: |
+        echo "# Updated on $(date)" >> rectv_kanallar.m3u  # Dosyaya zaman damgası ekliyoruz
+
     - name: Commit the M3U file from Bot 1
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add rectv_kanallar.m3u
-        git commit -m "Bot 1: Add new m3u file"
+        git commit -m "Bot 1: Add new m3u file with timestamp"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
 
   bot_2:
@@ -57,12 +61,16 @@ jobs:
       run: |
         python movies.py  # movies.py dosyasını çalıştırıyoruz
 
+    - name: Update M3U file from Bot 2 (Adding timestamp)
+      run: |
+        echo "# Updated on $(date)" >> rectv_movies.m3u  # Dosyaya zaman damgası ekliyoruz
+
     - name: Commit the M3U file from Bot 2
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add rectv_movies.m3u
-        git commit -m "Bot 2: Add new m3u file"
+        git commit -m "Bot 2: Add new m3u file with timestamp"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
 
   bot_3:
@@ -85,10 +93,14 @@ jobs:
       run: |
         python series.py  # series.py dosyasını çalıştırıyoruz
 
+    - name: Update M3U file from Bot 3 (Adding timestamp)
+      run: |
+        echo "# Updated on $(date)" >> rectv_series.m3u  # Dosyaya zaman damgası ekliyoruz
+
     - name: Commit the M3U file from Bot 3
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add rectv_series.m3u
-        git commit -m "Bot 3: Add new m3u file"
+        git commit -m "Bot 3: Add new m3u file with timestamp"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
