@@ -1,4 +1,4 @@
-name: Run Bot Every 6 Hours
+name: 6 Saatte Bir Revize
 
 on:
   schedule:
@@ -28,12 +28,14 @@ jobs:
 
     - name: Run bot
       run: |
-        python channels.py  # Botu çalıştırıyoruz
+        python channels.py  # channels.py dosyasını çalıştırıyoruz
+        python movies.py    # movies.py dosyasını çalıştırıyoruz
+        python series.py    # series.py dosyasını çalıştırıyoruz
 
     - name: Commit the M3U file to the repository
       run: |
         git config --global user.name "github-actions[bot]"  # GitHub Actions botu
         git config --global user.email "github-actions[bot]@users.noreply.github.com"  # Email adresi
         git add rectv_kanallar.m3u  # Ana dizine kaydedilen dosyayı ekliyoruz
-        git commit --amend --no-edit --date "$(date)"  # Dosyayı her zaman değiştiriyoruz
-        git push origin main --force  # Değişiklikleri GitHub'a gönderiyoruz
+        git commit -m "Add new m3u file"
+        git push origin main  # Değişiklikleri GitHub'a gönderiyoruz
