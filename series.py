@@ -63,6 +63,9 @@ def extract_serie_links(series):
         for source in sources:
             url = source.get("url")
             if url:
+                # URL'yi yeni formatta oluşturuyoruz
+                url = f"https://1.nejyoner19.workers.dev/?url={url}"
+
                 quality = source.get("quality", "")
                 quality_str = f" [{quality}]" if quality else ""
                 entry = (
@@ -83,6 +86,9 @@ def extract_serie_links(series):
                 for source in ep.get("sources", []):
                     url = source.get("url")
                     if url and url.endswith(".m3u8"):
+                        # URL'yi yeni formatta oluşturuyoruz
+                        url = f"https://1.nejyoner19.workers.dev/?url={url}"
+
                         quality = source.get("quality", "")
                         quality_str = f" [{quality}]" if quality else ""
                         entry = (
