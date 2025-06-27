@@ -1,0 +1,1 @@
+Deneme yanılma yöntemi
