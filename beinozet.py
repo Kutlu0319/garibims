@@ -98,7 +98,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
 
 all_lines.sort(key=lambda x: x[0])
 
-all_m3u_path = "all.m3u"
+all_m3u_path = "beinozet.m3u"
 with open(all_m3u_path, 'w', encoding='utf-8') as f:
     f.write("#EXTM3U\n\n")
     for sezonss, line1, line2 in all_lines:
