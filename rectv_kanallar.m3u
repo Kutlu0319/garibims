@@ -75,10 +75,6 @@ https://lively1.cf4-86.workers.dev/static/pl2.m3u8
 #EXTVLCOPT:http-user-agent=okhttp/4.12.0
 #EXTVLCOPT:http-referrer=https://twitter.com
 https://lively1.cf4-86.workers.dev/static/pl3.m3u8
-#EXTINF:-1 tvg-id="160" tvg-logo="https://m.prectv50.sbs/uploads/cache/channel_thumb/uploads/jpg/226d5b2f3ab5c01698dff96b24b14629.jpg" tvg-name="S Sport Plus" group-title="Spor",S Sport Plus [HD]
-#EXTVLCOPT:http-user-agent=okhttp/4.12.0
-#EXTVLCOPT:http-referrer=https://twitter.com
-https://tv100-live.daioncdn.net/tv100/tv100_1080p.m3u8
 #EXTINF:-1 tvg-id="139" tvg-logo="https://m.prectv50.sbs/uploads/cache/channel_thumb/uploads/png/e4e94b5f588beff702dfe39729379251.png" tvg-name="Spor Smart 1" group-title="Spor",Spor Smart 1 [HD]
 #EXTVLCOPT:http-user-agent=okhttp/4.12.0
 #EXTVLCOPT:http-referrer=https://twitter.com
@@ -426,4 +422,4 @@ https://saran-live.ercdn.net/disneyjunior/index.m3u8
 #EXTINF:-1 tvg-id="35" tvg-logo="https://m.prectv50.sbs/uploads/cache/channel_thumb/uploads/png/4a6d8c2049dd4c014cd443a9cd411f3b.png" tvg-name="Nickelodeon HD" group-title="Çocuk",Nickelodeon HD
 #EXTVLCOPT:http-user-agent=okhttp/4.12.0
 #EXTVLCOPT:http-referrer=https://twitter.com
-http://fl1.moveonjoy.com/NICKELODEON/index.m3u8# Updated on Sun Aug  3 02:37:09 UTC 2025
+http://fl1.moveonjoy.com/NICKELODEON/index.m3u8# Updated on Sun Aug  3 12:57:50 UTC 2025
