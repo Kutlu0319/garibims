@@ -27,7 +27,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run DMAX script
-        run: python DMAX/dmax.py
+        run: python DMAX/dmax.py 3 5
 
       - name: Commit generated M3U files
         run: |
