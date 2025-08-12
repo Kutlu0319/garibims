@@ -18,12 +18,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies (root requirements.txt varsa)
-        if: hashFiles('requirements.txt') != ''
-        run: pip install -r requirements.txt
-
-      # Eğer bağımlılıklar TLC/requirements.txt içindeyse, üstteki adımı kaldırıp şunu kullanın:
-      # - run: pip install -r TLC/requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install requests
+          # Başka bağımlılıklar varsa requirements.txt dosyası ekleyip:
+          # pip install -r requirements.txt
 
       - name: Run TLC script
         run: python TLC/tlc.py
