@@ -1,0 +1,29 @@
+name: TLC daily
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # her gün 03:00 UTC (TR için ~06:00)
+  workflow_dispatch:
+
+jobs:
+  run-tlc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (root requirements.txt varsa)
+        if: hashFiles('requirements.txt') != ''
+        run: pip install -r requirements.txt
+
+      # Eğer bağımlılıklar TLC/requirements.txt içindeyse, üstteki adımı kaldırıp şunu kullanın:
+      # - run: pip install -r TLC/requirements.txt
+
+      - name: Run TLC script
+        run: python TLC/tlc.py
