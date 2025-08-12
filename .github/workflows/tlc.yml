@@ -3,15 +3,15 @@ name: TLC daily
 on:
   schedule:
     - cron: "0 6 * * *"   # Her gün TR saatiyle 09:00
-  workflow_dispatch:       # İstersen manuel çalıştırabilirsin
+  workflow_dispatch:
 
 permissions:
-  contents: write          # Commit ve push izni
+  contents: write          # Commit/push izni
 
 jobs:
   run-tlc:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 360   # Maksimum süre (6 saat)
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
