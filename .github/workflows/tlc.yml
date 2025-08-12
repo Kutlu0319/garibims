@@ -2,7 +2,7 @@ name: TLC daily
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # her gün 03:00 UTC (TR için ~06:00)
+    - cron: "0 3 * * *"   # her gün 03:00 UTC (~06:00 TR)
   workflow_dispatch:
 
 jobs:
@@ -19,10 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install requests
-          # Başka bağımlılıklar varsa requirements.txt dosyası ekleyip:
-          # pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run TLC script
         run: python TLC/tlc.py
