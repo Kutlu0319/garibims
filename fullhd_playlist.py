@@ -109,4 +109,4 @@ def build_m3u(pages=5, output_file="playlist.m3u"):
                     print(f"⚠️ {slug} çözümlenemedi")
 
 if __name__ == "__main__":
-    build_m3u(pages=10)
+    build_m3u(pages=1)
