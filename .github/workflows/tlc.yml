@@ -2,13 +2,12 @@ name: TLC daily
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # her gün 03:00 UTC (~06:00 TR)
+    - cron: "0 6 * * *"   # TR 09:00
   workflow_dispatch:
 
 jobs:
   run-tlc:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
