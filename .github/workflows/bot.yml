@@ -1,118 +1,79 @@
-name: Çoklu Bot Çalıştırma
+name: M3U Botları (00:00 TR)
 
 on:
   schedule:
-    - cron: '0 */12 * * *'  # Her 12 saatte bir çalışacak
-  workflow_dispatch:  # Manuel tetikleme
+    # GitHub Actions cron UTC çalışır. Istanbul 00:00 => 21:00 UTC
+    - cron: "0 21 * * *"
+  workflow_dispatch: {}
 
 permissions:
-  contents: write  # repo içeriklerine yazma izni veriyoruz
+  contents: write
+
+env:
+  PY_VER: "3.11"
+  WORKDIR: "m3u"
+  COMMIT_USER: "github-actions[bot]"
+  COMMIT_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
 
 jobs:
-  bot_1:
+  run-bot:
+    name: ${{ matrix.bot_name }} Bot
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { bot_name: "Amazon",      file: "Amazon Prime.py",      out_hint: "amazon" }
+          - { bot_name: "Blutv",       file: "Blutv.py",             out_hint: "blutv" }
+          - { bot_name: "Disney+",     file: "Disney+.py",           out_hint: "disneyplus" }
+          - { bot_name: "Exxen",       file: "Exxen.py",             out_hint: "exxen" }
+          - { bot_name: "Gain",        file: "Gain.py",              out_hint: "gain" }
+          - { bot_name: "HBO Max",     file: "HBO Max.py",           out_hint: "hbomax" }
+          - { bot_name: "Hulu",        file: "Hulu.py",              out_hint: "hulu" }
+          - { bot_name: "Netflix",     file: "Netflix.py",           out_hint: "netflix" }
+          - { bot_name: "Paramount+",  file: "Paramount+.py",        out_hint: "paramountplus" }
+          - { bot_name: "Tabii",       file: "Tabii.py",             out_hint: "tabii" }
+          - { bot_name: "TOD TV",      file: "TOD TV.py",            out_hint: "todtv" }
+          - { bot_name: "Unutulmaz Diziler", file: "Unutulmaz Diziler.py", out_hint: "unutulmaz" }
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up Python for Bot 1
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+      - name: Set timezone (Europe/Istanbul)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tzdata
+          sudo ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
+          echo "Europe/Istanbul" | sudo tee /etc/timezone
+          date
 
-    - name: Install dependencies for Bot 1
-      run: |
-        python -m pip install --upgrade pip
-        pip install cloudscraper requests
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PY_VER }}
 
-    - name: Run Bot 1 (channels.py)
-      run: |
-        python channels.py  # channels.py dosyasını çalıştırıyoruz
+      - name: Install dependencies (optional)
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: Update M3U file from Bot 1 (Adding timestamp)
-      run: |
-        echo "# Updated on $(date)" >> rectv_kanallar.m3u  # Dosyaya zaman damgası ekliyoruz
+      - name: Run ${{ matrix.file }}
+        run: |
+          python "./${{ matrix.file }}"
 
-    - name: Pull latest changes before commit
-      run: |
-        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
-
-    - name: Commit the M3U file from Bot 1
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add rectv_kanallar.m3u
-        git commit -m "Bot 1: Add new m3u file with timestamp"
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
-
-  bot_2:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python for Bot 2
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-
-    - name: Install dependencies for Bot 2
-      run: |
-        python -m pip install --upgrade pip
-        pip install cloudscraper requests
-
-    - name: Run Bot 2 (movies.py)
-      run: |
-        python movies.py  # movies.py dosyasını çalıştırıyoruz
-
-    - name: Update M3U file from Bot 2 (Adding timestamp)
-      run: |
-        echo "# Updated on $(date)" >> rectv_movies.m3u  # Dosyaya zaman damgası ekliyoruz
-
-    - name: Pull latest changes before commit
-      run: |
-        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
-
-    - name: Commit the M3U file from Bot 2
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add rectv_movies.m3u
-        git commit -m "Bot 2: Add new m3u file with timestamp"
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
-
-  bot_3:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python for Bot 3
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-
-    - name: Install dependencies for Bot 3
-      run: |
-        python -m pip install --upgrade pip
-        pip install cloudscraper requests
-
-    - name: Run Bot 3 (series.py)
-      run: |
-        python series.py  # series.py dosyasını çalıştırıyoruz
-
-    - name: Update M3U file from Bot 3 (Adding timestamp)
-      run: |
-        echo "# Updated on $(date)" >> rectv_series.m3u  # Dosyaya zaman damgası ekliyoruz
-
-    - name: Pull latest changes before commit
-      run: |
-        git pull origin main  # Uzak depodaki son değişiklikleri yerel deponuza çekiyoruz
-
-    - name: Commit the M3U file from Bot 3
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add rectv_series.m3u
-        git commit -m "Bot 3: Add new m3u file with timestamp"
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+      # Scriptler dosya üretiyorsa değişiklikleri commit/push eder.
+      - name: Commit & push (if changed)
+        run: |
+          git config user.name  "${{ env.COMMIT_USER }}"
+          git config user.email "${{ env.COMMIT_EMAIL }}"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "${{ matrix.bot_name }} Bot output ($(date +'%Y-%m-%d %H:%M:%S %Z'))"
+            git push
+          else
+            echo "No changes to commit."
+          fi
