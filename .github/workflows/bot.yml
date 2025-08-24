@@ -1,49 +1,25 @@
-name: M3U Botları (00:00 TR)
+name: Run M3U Python Scripts (TRT 00:00)
 
 on:
   schedule:
-    # GitHub Actions cron UTC çalışır. Istanbul 00:00 => 21:00 UTC
+    # GitHub Actions CRON UTC çalışır. İstanbul 00:00 = UTC 21:00 (aynı günün -3 saati)
     - cron: "0 21 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch: {}   # İstersen manuel de tetikleyebilirsin
 
 permissions:
-  contents: write
-
-env:
-  PY_VER: "3.11"
-  WORKDIR: "m3u"
-  COMMIT_USER: "github-actions[bot]"
-  COMMIT_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+  contents: write   # Çıktıları depoya yazıp commit edebilmek için
 
 jobs:
-  run-bot:
-    name: ${{ matrix.bot_name }} Bot
+  run-scripts:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - { bot_name: "Amazon",      file: "Amazon Prime.py",      out_hint: "amazon" }
-          - { bot_name: "Blutv",       file: "Blutv.py",             out_hint: "blutv" }
-          - { bot_name: "Disney+",     file: "Disney+.py",           out_hint: "disneyplus" }
-          - { bot_name: "Exxen",       file: "Exxen.py",             out_hint: "exxen" }
-          - { bot_name: "Gain",        file: "Gain.py",              out_hint: "gain" }
-          - { bot_name: "HBO Max",     file: "HBO Max.py",           out_hint: "hbomax" }
-          - { bot_name: "Hulu",        file: "Hulu.py",              out_hint: "hulu" }
-          - { bot_name: "Netflix",     file: "Netflix.py",           out_hint: "netflix" }
-          - { bot_name: "Paramount+",  file: "Paramount+.py",        out_hint: "paramountplus" }
-          - { bot_name: "Tabii",       file: "Tabii.py",             out_hint: "tabii" }
-          - { bot_name: "TOD TV",      file: "TOD TV.py",            out_hint: "todtv" }
-          - { bot_name: "Unutulmaz Diziler", file: "Unutulmaz Diziler.py", out_hint: "unutulmaz" }
     defaults:
       run:
-        working-directory: ${{ env.WORKDIR }}
+        working-directory: m3u   # dosyaların bu klasörde; gerekirse değiştir
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Set timezone (Europe/Istanbul)
+      - name: Set timezone (Europe/Istanbul) for runtime
         run: |
           sudo apt-get update
           sudo apt-get install -y tzdata
@@ -51,28 +27,41 @@ jobs:
           echo "Europe/Istanbul" | sudo tee /etc/timezone
           date
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PY_VER }}
+          python-version: "3.11"
 
       - name: Install dependencies (optional)
+        if: hashFiles('m3u/requirements.txt') != ''
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 
-      - name: Run ${{ matrix.file }}
+      # PY dosyalarında boşluk ve + karakterleri var; hepsini güvenli şekilde tek tek çağırıyoruz.
+      - name: Run scripts
         run: |
-          python "./${{ matrix.file }}"
+          python "./Amazon Prime.py"
+          python "./Blutv.py"
+          python "./Disney+.py"
+          python "./Exxen.py"
+          python "./Gain.py"
+          python "./HBO Max.py"
+          python "./Hulu.py"
+          python "./Netflix.py"
+          python "./Paramount+.py"
+          python "./Tabii.py"
+          python "./TOD TV.py"
+          python "./Unutulmaz Diziler.py"
 
-      # Scriptler dosya üretiyorsa değişiklikleri commit/push eder.
-      - name: Commit & push (if changed)
+      # Eğer scriptler çıktı dosyaları üretip depoya yazıyorsa, commit/push et
+      - name: Commit & push results (if changed)
         run: |
-          git config user.name  "${{ env.COMMIT_USER }}"
-          git config user.email "${{ env.COMMIT_EMAIL }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "${{ matrix.bot_name }} Bot output ($(date +'%Y-%m-%d %H:%M:%S %Z'))"
+            git commit -m "Auto-update M3U outputs ($(date +'%Y-%m-%d %H:%M:%S %Z'))"
             git push
           else
             echo "No changes to commit."
