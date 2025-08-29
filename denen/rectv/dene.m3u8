@@ -1,5 +1,0 @@
-#EXTM3U
-#EXTINF:-1 tvg-id="8957" tvg-logo="https://m.prectv49.sbs/uploads/cache/poster_thumb/uploads/jpg/40c93850264c6a4122c54f26f85b88b0.jpg" tvg-name="Tezgah" group-title="Filmler",Tezgah (2024)
-#EXTVLCOPT:http-user-agent=okhttp/4.12.0
-#EXTVLCOPT:http-referrer=https://twitter.com
-https://load.rectv2024live.com/hls/8/cdn1611/rejU2CQbPE9g2ZUYk8VZQKAbH2KSyESxpEmBdCOw.mp4/index.m3u8
