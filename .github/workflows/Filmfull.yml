@@ -41,7 +41,7 @@ jobs:
 
       # 4. Adım: M3U dosyasını oluşturan ana Python betiğini çalıştırır
       - name: Betiği Çalıştır ve M3U Dosyasını Oluştur
-        run: python deneme.py
+        run: python 2 deneme.py
 
       # 5. Adım: Oluşturulan dosyayı depoya commit'ler ve push'lar
       - name: Değişiklikleri Depoya Gönder (Commit & Push)
