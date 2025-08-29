@@ -1,0 +1,62 @@
+
+# .github/workflows/main.yml
+
+name: M3U Playlist Oluşturucu ve Güncelleyici
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # YENİ EKLENEN BÖLÜM: İş akışına repoya kod gönderme (write) izni verir.
+    permissions:
+      contents: write
+
+    steps:
+      # Adım 1: Repoyu sanal makineye kopyalar
+      - name: Repoyu Kopyala
+        uses: actions/checkout@v4
+
+      # Adım 2: Python 3.10 ortamını kurar
+      - name: Python'u Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # Adım 3: Gerekli Python kütüphanelerini yükler
+      - name: Bağımlılıkları Yükle
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # Adım 4 (Opsiyonel): Hata ayıklama için dosya yapısını listeler
+      - name: Dosya Yapısını Kontrol Et
+        run: ls -R
+
+      # Adım 5: M3U dosyasını oluşturmak için Python betiğini çalıştırır
+      - name: Betiği Çalıştır ve M3U Oluştur
+        # Önceki hataya göre dosyanızın "Selcuk" klasöründe olduğunu varsayıyorum.
+        # Eğer ana dizindeyse, "Selcuk/" kısmını silin.
+        run: python selcuk.py
+
+      # Adım 6: Oluşturulan M3U dosyasını repoya commit'ler ve push'lar
+      - name: Değişiklikleri Repoya Yükle
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add selcuk.m3u
+          git diff --staged --quiet || (git commit -m "M3U listesi güncellendi" && git push)
+
+      # Adım 7: Oluşturulan M3U dosyasını bir artifact olarak kaydeder
+      - name: M3U Dosyasını Artifact Olarak Kaydet
+        uses: actions/upload-artifact@v4
+        with:
+          name: selcuk-playlist
+          path: selcuk.m3u

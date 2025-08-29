@@ -1,0 +1,35 @@
+name: Generate TRGOALS M3U
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Her 6 saatte bir
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Generate M3U
+      run: |
+        python trgoals.py
+        echo "Dosya boyutu: $(du -h trgoals.m3u)"
+
+    - name: Commit and push
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add trgoals.m3u
+        git diff --cached --quiet || git commit -m "Auto: TRGOALS M3U Update"
+        git push
