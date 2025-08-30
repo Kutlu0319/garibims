@@ -31,7 +31,7 @@ jobs:
     # 3. Adım: PHP betiğini çalıştırır
     - name: Run PHP Generators
       run: |
-        php m3u-generator
+        php m3u-generator.php
        
 
     # 4. Adım: Oluşturulan dosyaları kontrol eder ve değişiklik varsa depoya gönderir
